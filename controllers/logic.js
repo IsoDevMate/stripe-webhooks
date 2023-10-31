@@ -1,10 +1,8 @@
 
 const asyncHandler = require('express-async-handler');
 const stripe =require('stripe')(process.env.STRIPE_SECRET_KEY );
-
+const axios = require('axios');
 exports.handleStripeWebhook=asyncHandler(async(request,response,next)=>{
-
-
 
 //Validate the stripe webhook secret, then call the handler for the event type
  
@@ -99,6 +97,7 @@ exports.handleStripeWebhook=asyncHandler(async(request,response,next)=>{
   //response.send();
   // Return a response to acknowledge receipt of the event
   response.json({received: true})
+  response.status(200).send("ok");
 }}
 catch (err) {
   console.log(`❌ Error message: ${err.message}`);
@@ -108,3 +107,18 @@ catch (err) {
 }
 }
 )
+
+//test if the webhook is returning a 200 ok response
+
+exports.callback=asyncHandler(async(request,response,next)=>{
+  const callbackurl =" https://88d6-41-212-65-143.ngrok-free.app"
+   const data = await axios.post(callbackurl, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  console.log("callback",data)
+  response.send("callback");
+  response.status(200).send("ok");
+  }
+  )
