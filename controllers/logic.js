@@ -5,18 +5,23 @@ const axios = require('axios');
 exports.handleStripeWebhook=asyncHandler(async(request,response,next)=>{
 
 //Validate the stripe webhook secret, then call the handler for the event type
- 
 
-    let event = request.body;
+
+
+
+   //const payload = await request.text();
+   let event
+   const body = request.rawBody.toString();
     const sig = request.headers['stripe-signature'];
     const endpointSecret=process.env.STRIPE_WEBHOOK_SECRET;
 
     try {
       event = stripe.webhooks.constructEvent(
-        request.body,
+        body,
          sig,
           endpointSecret
           );
+          console.log("webhook verified",event)
        // Extract the object from the event.
        const dataObject = event.data.object;
        if (dataObject['billing_reason'] == 'subscription_create') {
@@ -97,7 +102,7 @@ exports.handleStripeWebhook=asyncHandler(async(request,response,next)=>{
   //response.send();
   // Return a response to acknowledge receipt of the event
   response.json({received: true})
-  response.status(200).send("ok");
+  response.status(200).send("ok").end();
 }}
 catch (err) {
   console.log(`❌ Error message: ${err.message}`);
