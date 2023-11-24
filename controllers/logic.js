@@ -6,9 +6,6 @@ exports.handleStripeWebhook=asyncHandler(async(request,response,next)=>{
 
 //Validate the stripe webhook secret, then call the handler for the event type
 
-
-
-
    //const payload = await request.text();
    let event
    const body = request.rawBody.toString();

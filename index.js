@@ -16,10 +16,20 @@ app.use(
   })
 );
 
+/*
+app.use(bodyParser.json({
+  verify: function (req, res, buf) {
+      var url = req.originalUrl;
+      if (url.startsWith('/webhook')) {
+          req.rawBody = buf.toString()
+      }
+  }
+}));
+*/
 app.use('/api',routing);
 
 // Use the body-parser middleware to parse the request body as JSON
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
